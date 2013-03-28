@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <title>Kattowitz :: Stalinogród :: Katowice</title>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Gabriela&subset=latin,latin-ext' rel='stylesheet' type='text/css'> -->
+    <style>
+      body {
+        width: 960px;
+        margin: 10px auto;
+        /* font-family: 'Gabriela', serif; */
+      }
+      #viewport {
+        margin: 30px;
+        width: 900px;
+        height: 600px;
+        float: left;
+        box-shadow: 0px 0px 4px #888;
+        position: relative;
+        overflow: hidden;
+      }
+      img {
+        position: absolute;
+      }
+      #menu {
+        margin-top: 10px;
+        margin-left: 25px;
+      }
+      .map-menu {
+        float: left;
+        margin-left: 25px;
+      }
+      .zoom-info {
+        float: right;
+        margin: 30px;
+      }
+      #map {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="menu">
+      <div id="1906" class="map-menu">
+        <h3>1906</h3>
+        <label>
+          <input data-type="opacity" data-period="1906" type="checkbox"> 
+          przezrocze
+        </label>
+        <br /><br />
+
+        <label>
+          <input class="layer-box" data-period="1906" data-layer="zabudowa" type="checkbox">
+          zabudowa
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="1906" data-layer="drogi" type="checkbox">
+          drogi
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="1906" data-layer="przyroda" type="checkbox">
+          przyroda
+        </label>
+      </div>
+
+      <div id="wielkie" class="map-menu">
+        <h3>wielkie</h3>
+        <label>
+          <input data-type="opacity" data-period="wielkie" type="checkbox"> 
+          przezrocze
+        </label>
+        <br /><br />
+
+        <label>
+          <input class="layer-box" data-period="wielkie" data-layer="zabudowa" type="checkbox">
+          zabudowa
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="wielkie" data-layer="drogi" type="checkbox">
+          drogi
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="wielkie" data-layer="przyroda" type="checkbox">
+          przyroda
+        </label>
+      </div>
+
+      <div id="70" class="map-menu">
+        <h3>70</h3>
+        <label>
+          <input data-type="opacity" data-period="70" type="checkbox"> 
+          przezrocze
+        </label>
+        <br /><br />
+
+        <label>
+          <input class="layer-box" data-period="70" data-layer="zabudowa" type="checkbox">
+          zabudowa
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="70" data-layer="drogi" type="checkbox">
+          drogi
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="70" data-layer="przyroda" type="checkbox">
+          przyroda
+        </label>
+      </div>
+
+      <div id="wspolczesna" class="map-menu">
+        <h3>wspolczesna</h3>
+        <label>
+          <input data-type="opacity" data-period="wspolczesna" type="checkbox"> 
+          przezrocze
+        </label>
+        <br /><br />
+
+        <label>
+          <input class="layer-box" data-period="wspolczesna" data-layer="zabudowa" type="checkbox">
+          zabudowa
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="wspolczesna" data-layer="drogi" type="checkbox">
+          drogi
+        </label>
+        <br />
+
+        <label>
+          <input class="layer-box" data-period="wspolczesna" data-layer="przyroda" type="checkbox">
+          przyroda
+        </label>
+      </div>
+
+      <p class="zomm-info">Zoom: <span id="zoom"></span></p>
+    </section>
+
+    <section id="viewport"> 
+      <div id="map"> 
+        <div class="layer" id="przyroda"> </div>
+        <div class="layer" id="drogi">    </div>
+        <div class="layer" id="zabudowa"> </div>
+      </div>
+    </section>
+
+    <script src="./public/javascript/jquery.js"></script>
+    <script src="./public/javascript/underscore.js"></script>
+    <script src="./public/javascript/map.js"></script>
+    <script src="./public/javascript/jquery.mousewheel.min.js"></script>
+  </body>
+</html>
