@@ -22,7 +22,7 @@ while offset is not None:
             'srsearch'   : 'katowice',
             'sroffset'   : offset
             })
-    
+    # Wiki API hangs now and then, so try hard!    
     search_results = {}
     while not search_results or 'error' in search_results:
         # read stringified json result
@@ -62,6 +62,7 @@ with open('photos.csv', 'w') as f:
                 'format' : 'json'
                 })
 
+        # Wiki API hangs now and then, so try for 5 seconds and go on
         search_results = {}
         time_now = time.time()
         while (time.time() - time_now < 5) and (not search_results or 'error' in search_results):
@@ -73,6 +74,7 @@ with open('photos.csv', 'w') as f:
         img_url = search_results['query']['allimages'][0]['url']
         
         with open("./photos/%s" % fname, 'wb') as img_f:
+            # Wiki API hangs now and then, so try for 5 seconds and go on
             time_now = time.time()
             img_data = ''
             while (time.time() - time_now < 5) and (img_data == '' or img_data.startswith('<!DOCTYPE HTML PUBLIC')):
