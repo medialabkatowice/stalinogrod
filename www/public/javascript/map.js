@@ -6,7 +6,7 @@
         x: 300, 
         y: 300,
         img: '001.jpg',
-        title: 'Janek lubi czarne jagody',
+        title: 'Janek lubi czarne jagody i różnowy boczek',
         link: 'x'
     }, {
         x: 350, 
@@ -63,7 +63,8 @@
 
     // drag map handler
     viewport.el.mousedown(function (down_event) {
-      if(down_event.target.getAttribute('class') === 'pin') {
+      var target_class = down_event.target.getAttribute('class');
+      if(target_class === 'pin' || target_class === 'zoom') {
           $(down_event.target).trigger('click');
           return false;
       }
@@ -95,7 +96,8 @@
       }
     });
 
-    $('#viewport').mousewheel(function (e, delta) {
+    // TODO buttons disapear after zooming
+    $('.zoom').click(function (e) {
       var half_w = viewport.geo.w / 2;
       var half_h = viewport.geo.h / 2;
       var cent_x = viewport.off.left + (viewport.geo.w / 2);
@@ -104,6 +106,7 @@
       var dist_y = map.off.top  - cent_y;
       var canv_x = canvas_dims[zoom].w;
       var canv_y = canvas_dims[zoom].h;
+      var delta  = $(this).attr('id') === 'zoom_in' ? 1 : -1;
 
       if((zoom > 1 && delta === -1) || (zoom < 4 && delta === 1)) {
         zoom += delta;
@@ -164,7 +167,7 @@
         pins.forEach(function (pin, i) {
             var left = pin.x * zoom - 16;
             var top  = pin.y * zoom - 13;
-            var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="position: absolute; top: '+ top +'px; left: '+ left +'px" />');
+            var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="top: '+ top +'px; left: '+ left +'px" />');
 
             $('#zdjecia').append(marker);
             marker.click(function (e) {
@@ -177,21 +180,21 @@
                     this.width  *= ratio < 1.0 ? ratio : 1;
                     this.height *= ratio < 1.0 ? ratio : 1;
 
-                    this.setAttribute('position','relative');
+                    this.style.position = 'relative';
 
                     $('#lightbox')
                         .empty()
-                        .width(this.width)
-                        .height(this.height + (pin.link ? 40 : 20))
                         .css({
                             // this "- 30" stands for the padding
-                            left: (900 - this.width) / 2 - 30,
-                            top : (600 - this.height) / 2 - 30
+                            'left'      : (viewport.geo.w - this.width)  / 2 - 30,
+                            'top'       : viewport.geo.h * 0.05,
+                            'width'     : this.width,
+                            'min-height': this.height
                         })        
                         .append('<img src="./public/images/close.png" id="close" />')
                         .append('<p id="title">'+ pin.title +'</p>')
                         .append(this)
-                        .append(pin.link ? '<br /><p><a href="'+ pin.link +'">Przeczytaj o tym budynku</a></p>' : '')
+                        .append(pin.link ? '<br /><p class="more"><a href="'+ pin.link +'">Przeczytaj artykuł o tym budynku »</a></p>' : '')
                         .show()
                         .click(function () {
                             $(this).empty().hide();

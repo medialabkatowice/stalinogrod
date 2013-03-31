@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Kattowitz :: Stalinogród :: Katowice</title>
-    <!-- <link href='http://fonts.googleapis.com/css?family=Gabriela&subset=latin,latin-ext' rel='stylesheet' type='text/css'> -->
     <style>
       body {
         width: 960px;
         margin: 10px auto;
-        /* font-family: 'Gabriela', serif; */
+        font-family: sans-serif;
       }
       #viewport {
         margin: 30px;
@@ -62,9 +61,25 @@
       }
       .pin {
         box-shadow: 0 0 5px #888;
+        position: absolute;
       }
       .pin:hover {
-        cursor: point;
+        cursor: pointer;
+      }
+      a {
+        font-size: 0.8em;
+        text-decoration: none;
+        color: #888;
+      }
+      a:hover {
+        text-decoration: underline;
+        color: #333;
+      }
+      .more {
+        float: right;
+      }
+      .zoom:hover {
+        cursor: pointer;
       }
     </style>
   </head>
@@ -184,7 +199,13 @@
         <div class="layer" id="zabudowa"> </div>
         <div class="layer" id="zdjecia"> </div>
       </div>
-      <div id="lightbox">
+      <div id="lightbox"> </div>
+      <div id="zoom"> 
+        <img src="./public/images/zoom_in.png"  id="zoom_in"
+        class="zoom" />
+        <br /><br />
+        <img src="./public/images/zoom_out.png" id="zoom_out"
+        class="zoom" />
       </div>
     </section>
 
