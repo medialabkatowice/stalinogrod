@@ -7,19 +7,18 @@
         y: 300,
         img: '001.jpg',
         title: 'Janek lubi czarne jagody',
-        desc: 'To jest kawałek tekstu, który zostanie wprowadzony w system'
+        link: 'x'
     }, {
         x: 350, 
         y: 325,
         img: '002.png',
         title: 'Janek lubi czarne jagody',
-        desc: 'To jest kawałek tekstu, który zostanie wprowadzony w system'
     }, {
         x: 599, 
         y: 465,
         img: '003.jpg',
         title: 'Janek lubi czarne jagody',
-        desc: 'To jest kawałek tekstu, który zostanie wprowadzony w system'
+        link: 'x'
     }];
 
     // map vars
@@ -64,6 +63,10 @@
 
     // drag map handler
     viewport.el.mousedown(function (down_event) {
+      if(down_event.target.getAttribute('class') === 'pin') {
+          $(down_event.target).trigger('click');
+          return false;
+      }
       var down_mouse_x = down_event.pageX;
       var down_mouse_y = down_event.pageY;
       var down_map_x = map.off.left;
@@ -156,7 +159,53 @@
     $('#zoom').html(zoom);
     $('#1906').find('.layer-box').trigger('click');
 
+    function add_pins() {
+        $('.pin').remove();
+        pins.forEach(function (pin, i) {
+            var left = pin.x * zoom - 16;
+            var top  = pin.y * zoom - 13;
+            var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="position: absolute; top: '+ top +'px; left: '+ left +'px" />');
+
+            $('#zdjecia').append(marker);
+            marker.click(function (e) {
+                var img = new Image();
+                img.onload = function() {
+                    var x_ratio = 500 / this.width;
+                    var y_ratio = 400 / this.height;
+                    var ratio   = x_ratio < y_ratio ? x_ratio : y_ratio;
+
+                    this.width  *= ratio < 1.0 ? ratio : 1;
+                    this.height *= ratio < 1.0 ? ratio : 1;
+
+                    this.setAttribute('position','relative');
+
+                    $('#lightbox')
+                        .empty()
+                        .width(this.width)
+                        .height(this.height + (pin.link ? 40 : 20))
+                        .css({
+                            // this "- 30" stands for the padding
+                            left: (900 - this.width) / 2 - 30,
+                            top : (600 - this.height) / 2 - 30
+                        })        
+                        .append('<img src="./public/images/close.png" id="close" />')
+                        .append('<p id="title">'+ pin.title +'</p>')
+                        .append(this)
+                        .append(pin.link ? '<br /><p><a href="'+ pin.link +'">Przeczytaj o tym budynku</a></p>' : '')
+                        .show()
+                        .click(function () {
+                            $(this).empty().hide();
+                        });
+                }
+                img.src = './public/images/' + pin.img;
+            });
+        });
+    }
+
+    $('#pin-2').click();
+    
     function draw_map() {
+      add_pins();
       var x_off = Math.floor((viewport.off.left - map.off.left) / tile_size);
       var y_off = Math.floor((viewport.off.top  - map.off.top)  / tile_size);
 
@@ -204,19 +253,6 @@
         var value  = $(this).attr('checked') ? '0.7' : '1.0';
 
         $('img[data-period="'+ period +'"]').css('opacity', value);
-      });
-
-      $('.pin').remove();
-      pins.forEach(function (pin, i) {
-        var left = pin.x * zoom - 13;
-        var top  = pin.y * zoom - 50;
-        var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="position: absolute; top: '+ top +'px; left: '+ left +'px" />');
-
-        marker.click(function (e) {
-            console.log(pin.img);
-            $(body).append('<img src="./public/images/'+ pin.img +'" />');
-        });
-        map.el.append(marker);
       });
     }
   });
