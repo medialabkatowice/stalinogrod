@@ -64,7 +64,7 @@
     // drag map handler
     viewport.el.mousedown(function (down_event) {
       var target_class = down_event.target.getAttribute('class');
-      if(target_class === 'pin' || target_class === 'zoom') {
+      if(target_class === 'pin') {
           $(down_event.target).trigger('click');
           return false;
       }
@@ -131,6 +131,14 @@
         draw_map();
       }
 
+      $('.zoom').css('cursor', 'pointer');
+
+      if(zoom === 4) {
+        $('#zoom_in').css('cursor', 'default');
+      }
+      if(zoom === 1) {
+        $('#zoom_out').css('cursor', 'default');
+      }
       return false;
     });
     
@@ -205,10 +213,9 @@
         });
     }
 
-    $('#pin-2').click();
+//    $('#pin-2').click();
     
     function draw_map() {
-      add_pins();
       var x_off = Math.floor((viewport.off.left - map.off.left) / tile_size);
       var y_off = Math.floor((viewport.off.top  - map.off.top)  / tile_size);
 
@@ -257,6 +264,8 @@
 
         $('img[data-period="'+ period +'"]').css('opacity', value);
       });
+      add_pins();
+      $('.zoom').show();
     }
   });
 })();
