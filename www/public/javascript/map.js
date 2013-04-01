@@ -13,13 +13,13 @@
         x: 350, 
         y: 325,
         img: '002.png',
-        title: 'Janek lubi czarne jagody',
+        title: 'Staszek lubi czerwone borówki',
         period: '70'
     }, {
         x: 599, 
         y: 465,
         img: '003.jpg',
-        title: 'Janek lubi czarne jagody',
+        title: 'Kazek lubi czarną kaszankę',
         link: 'x',
         period: '1906'
     }];
@@ -99,54 +99,8 @@
       }
     });
 
-    // TODO buttons disapear after zooming
-    $('.zoom').click(function (e) {
-      var half_w = viewport.geo.w / 2;
-      var half_h = viewport.geo.h / 2;
-      var cent_x = viewport.off.left + (viewport.geo.w / 2);
-      var cent_y = viewport.off.top  + (viewport.geo.h / 2);
-      var dist_x = map.off.left - cent_x;
-      var dist_y = map.off.top  - cent_y;
-      var canv_x = canvas_dims[zoom].w;
-      var canv_y = canvas_dims[zoom].h;
-      var delta  = $(this).attr('id') === 'zoom_in' ? 1 : -1;
-
-      if((zoom > 1 && delta === -1) || (zoom < 4 && delta === 1)) {
-        zoom += delta;
-        $('#zoom').html(zoom);
-
-        $('img:visible').each(function () {
-          var self = $(this);
-
-          self.hide();
-          hidden[self.attr('id')] = true;
-        });
-
-        var new_dist_x = (dist_x * canvas_dims[zoom].w / canv_x) + half_w;
-        var new_dist_y = (dist_y * canvas_dims[zoom].h / canv_y) + half_h;
-
-        map.off = {
-          left: viewport.off.left + new_dist_x,
-          top : viewport.off.top  + new_dist_y
-        }
-        map.el.offset(map.off);
-
-        draw_map();
-      }
-
-      $('.zoom').css('cursor', 'pointer');
-
-      if(zoom === 4) {
-        $('#zoom_in').css('cursor', 'default');
-      }
-      if(zoom === 1) {
-        $('#zoom_out').css('cursor', 'default');
-      }
-      return false;
-    });
-    
     // CHECKBOX HANDLER
-    $('input').each(function () {
+    $('input:checkbox').each(function () {
       $(this).removeAttr('checked');
     }).click(function () {
       var p = $(this).attr('data-period');
@@ -174,9 +128,9 @@
     $('#1906').find('.layer-box').trigger('click');
 
     function add_pins(period) {
-        pins.filter(function (e) {
-	    return e.period === period;
-	}).forEach(function (pin, i) {
+      pins.filter(function (e) {
+        return e.period === period;
+      }).forEach(function (pin, i) {
             var left = pin.x * zoom - 16;
             var top  = pin.y * zoom - 13;
             var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="top: '+ top +'px; left: '+ left +'px" />');
@@ -217,7 +171,41 @@
         });
     }
 
-//    $('#pin-2').click();
+    // RADIO HANDLER
+    $('input:radio').click(function () {
+      var half_w = viewport.geo.w / 2;
+      var half_h = viewport.geo.h / 2;
+      var cent_x = viewport.off.left + (viewport.geo.w / 2);
+      var cent_y = viewport.off.top  + (viewport.geo.h / 2);
+      var dist_x = map.off.left - cent_x;
+      var dist_y = map.off.top  - cent_y;
+      var canv_x = canvas_dims[zoom].w;
+      var canv_y = canvas_dims[zoom].h;
+      zoom = parseInt($(this).val());
+
+      $('#zoom').html(zoom);
+
+      $('img:visible').each(function () {
+        var self = $(this);
+
+        self.hide();
+        hidden[self.attr('id')] = true;
+      });
+
+      var new_dist_x = (dist_x * canvas_dims[zoom].w / canv_x) + half_w;
+      var new_dist_y = (dist_y * canvas_dims[zoom].h / canv_y) + half_h;
+
+      map.off = {
+        left: viewport.off.left + new_dist_x,
+        top : viewport.off.top  + new_dist_y
+      }
+      map.el.offset(map.off);
+
+      draw_map();
+    });
+    
+      
+    $('input[value="3"]').click();
     
     function draw_map() {
       var x_off = Math.floor((viewport.off.left - map.off.left) / tile_size);
@@ -264,10 +252,10 @@
 
       $('.pin').remove();
       $('input[data-layer="zdjecia"]').each(function () {
-	if($(this).attr('checked')) {
-		add_pins($(this).attr('data-period'));
-	}
-	});	
+        if($(this).attr('checked')) {
+          add_pins($(this).attr('data-period'));
+        }
+      });	
       $('input[data-type="opacity"]').each(function () {
         var period = $(this).attr('data-period');
         var value  = $(this).attr('checked') ? '0.7' : '1.0';
