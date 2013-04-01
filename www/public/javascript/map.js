@@ -7,18 +7,21 @@
         y: 300,
         img: '001.jpg',
         title: 'Janek lubi czarne jagody i różnowy boczek',
-        link: 'x'
+        link: 'x',
+        period: '1906'
     }, {
         x: 350, 
         y: 325,
         img: '002.png',
         title: 'Janek lubi czarne jagody',
+        period: '70'
     }, {
         x: 599, 
         y: 465,
         img: '003.jpg',
         title: 'Janek lubi czarne jagody',
-        link: 'x'
+        link: 'x',
+        period: '1906'
     }];
 
     // map vars
@@ -170,9 +173,10 @@
     $('#zoom').html(zoom);
     $('#1906').find('.layer-box').trigger('click');
 
-    function add_pins() {
-        $('.pin').remove();
-        pins.forEach(function (pin, i) {
+    function add_pins(period) {
+        pins.filter(function (e) {
+	    return e.period === period;
+	}).forEach(function (pin, i) {
             var left = pin.x * zoom - 16;
             var top  = pin.y * zoom - 13;
             var marker = $('<img id="pin-'+ i +'" class="pin" src="./public/images/marker.png" style="top: '+ top +'px; left: '+ left +'px" />');
@@ -258,13 +262,18 @@
         });
       });
 
+      $('.pin').remove();
+      $('input[data-layer="zdjecia"]').each(function () {
+	if($(this).attr('checked')) {
+		add_pins($(this).attr('data-period'));
+	}
+	});	
       $('input[data-type="opacity"]').each(function () {
         var period = $(this).attr('data-period');
         var value  = $(this).attr('checked') ? '0.7' : '1.0';
 
         $('img[data-period="'+ period +'"]').css('opacity', value);
       });
-      add_pins();
       $('.zoom').show();
     }
   });
